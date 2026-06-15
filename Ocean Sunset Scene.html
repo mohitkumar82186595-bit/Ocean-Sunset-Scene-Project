@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ocean Sunset Scene</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            cursor: none;
+        }
+
+        /* --- MAIN SCENE --- */
+        .scene {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1200px;
+        }
+
+        /* --- SKY --- */
+        .sky {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 65%;
+            background: linear-gradient(
+                to bottom,
+                #050510 0%,
+                #0d0d30 12%,
+                #2a1a4a 25%,
+                #5c1a3a 40%,
+                #9a2e2e 55%,
+                #c84838 68%,
+                #e86838 80%,
+                #f59050 90%,
+                #ffbd78 100%
+            );
+            z-index: 1;
+        }
+
+        /* Stars */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 45%;
+            background-image: 
+                radial-gradient(1.5px 1.5px at 8% 15%, #fff, transparent),
+                radial-gradient(1px 1px at 22% 28%, #fff, transparent),
+                radial-gradient(2px 2px at 38% 8%, #fff, transparent),
+                radial-gradient(1px 1px at 55% 35%, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1.5px 1.5px at 70% 18%, #fff, transparent),
+                radial-gradient(1px 1px at 85% 32%, #fff, transparent),
+                radial-gradient(2px 2px at 95% 12%, #fff, transparent),
+                radial-gradient(1px 1px at 15% 55%, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1.5px 1.5px at 48% 6%, #fff, transparent),
+                radial-gradient(1px 1px at 72% 58%, #fff, transparent),
+                radial-gradient(2px 2px at 5% 72%, #fff, transparent),
+                radial-gradient(1px 1px at 62% 65%, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 82% 70%, #fff, transparent);
+            background-size: 350px 350px;
+            animation: star-twinkle 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes star-twinkle {
+            0% { opacity: 0.4; }
+            100% { opacity: 0.9; }
+        }
+
+        /* --- SUN --- */
+        .sun-container {
+            position: absolute;
+            bottom: 33%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .sun {
+            width: 130px;
+            height: 130px;
+            background: radial-gradient(circle at 35% 35%, #fffbe6, #ffd700 15%, #ffaa00 45%, #ff6600 75%, #ff3300);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 60px 20px rgba(255, 140, 0, 0.8),
+                0 0 140px 50px rgba(255, 80, 0, 0.5),
+                0 0 220px 90px rgba(255, 50, 0, 0.3);
+            animation: sun-glow 5s ease-in-out infinite alternate;
+        }
+
+        @keyframes sun-glow {
+            0% { 
+                box-shadow: 
+                    0 0 60px 20px rgba(255, 140, 0, 0.8),
+                    0 0 140px 50px rgba(255, 80, 0, 0.5),
+                    0 0 220px 90px rgba(255, 50, 0, 0.3);
+                filter: brightness(1);
+            }
+            100% { 
+                box-shadow: 
+                    0 0 80px 25px rgba(255, 140, 0, 0.9),
+                    0 0 180px 60px rgba(255, 80, 0, 0.6),
+                    0 0 280px 110px rgba(255, 50, 0, 0.4);
+                filter: brightness(1.15);
+            }
+        }
+
+        /* Sun Reflection */
+        .reflection {
+            position: absolute;
+            bottom: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            height: 90px;
+            background: linear-gradient(to bottom, rgba(255,140,0,0.5) 0%, rgba(255,100,0,0.25) 50%, transparent 100%);
+            filter: blur(15px);
+            z-index: 15;
+            animation: reflection-move 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes reflection-move {
+            0% { opacity: 0.5; width: 220px; }
+            100% { opacity: 0.85; width: 270px; }
+        }
+
+        /* Horizon Glow */
+        .horizon-glow {
+            position: absolute;
+            bottom: 35%;
+            left: 0;
+            width: 100%;
+            height: 130px;
+            background: linear-gradient(to top, rgba(255,150,50,0.3), rgba(255,100,30,0.12), transparent);
+            z-index: 14;
+            filter: blur(30px);
+        }
+
+        /* --- BIRDS --- */
+        .bird-group {
+            position: absolute;
+            top: 16%;
+            left: 0;
+            z-index: 20;
+            animation: birds-fly 38s linear infinite;
+        }
+
+        .bird {
+            position: absolute;
+            width: 20px;
+            height: 9px;
+            border: 2px solid #1a1a2e;
+            border-top: none;
+            border-radius: 50% 50% 50% 50%;
+            animation: bird-flap 0.22s ease-in-out infinite alternate;
+            opacity: 0.95;
+        }
+
+        .bird-1 { top: 0; left: 0; }
+        .bird-2 { top: 14px; left: 28px; animation-delay: 0.07s; }
+        .bird-3 { top: -6px; left: 50px; transform: scale(0.85); animation-delay: 0.14s; }
+        .bird-4 { top: 10px; left: 70px; transform: scale(0.75); animation-delay: 0.04s; }
+        .bird-5 { top: -12px; left: 92px; transform: scale(0.65); animation-delay: 0.18s; }
+
+        @keyframes bird-flap {
+            0% { transform: translateY(0) scaleY(1); }
+            100% { transform: translateY(2px) scaleY(0.75); }
+        }
+
+        @keyframes birds-fly {
+            0% { transform: translateX(-12vw); }
+            100% { transform: translateX(112vw); }
+        }
+
+        /* Second bird group */
+        .bird-group-2 {
+            position: absolute;
+            top: 22%;
+            left: 0;
+            z-index: 20;
+            animation: birds-fly 48s linear infinite;
+            animation-delay: -18s;
+            opacity: 0.75;
+        }
+
+        .bird-group-2 .bird {
+            width: 14px;
+            height: 6px;
+            background: #1a1a2e;
+        }
+
+        /* --- OCEAN --- */
+        .ocean {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            background: linear-gradient(to bottom, #0b1522, #132535, #1c3850);
+            z-index: 30;
+        }
+
+        /* --- WAVES --- */
+        .waves-container {
+            position: absolute;
+            bottom: 0;
+            left: -50%;
+            width: 200%;
+            height: 100%;
+            z-index: 35;
+        }
+
+        .wave {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background-repeat: repeat-x;
+            background-size: 850px 100%;
+        }
+
+        .wave1 {
+            bottom: 90px;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath fill='%23183045' d='M0,55 Q300,95 600,55 T1200,55 V120 H0 Z' opacity='0.5'/%3E%3C/svg%3E");
+            animation: wave-move 20s linear infinite;
+            z-index: 36;
+        }
+
+        .wave2 {
+            bottom: 72px;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath fill='%23254058' d='M0,45 Q280,85 560,45 T1200,45 V120 H0 Z' opacity='0.6'/%3E%3C/svg%3E");
+            animation: wave-move 16s linear infinite reverse;
+            z-index: 37;
+        }
+
+        .wave3 {
+            bottom: 52px;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath fill='%23305068' d='M0,35 Q260,75 520,35 T1200,35 V120 H0 Z' opacity='0.7'/%3E%3C/svg%3E");
+            animation: wave-move 12s linear infinite;
+            z-index: 38;
+        }
+
+        .wave4 {
+            bottom: 32px;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath fill='%233c5570' d='M0,25 Q230,65 480,25 T1200,25 V120 H0 Z' opacity='0.8'/%3E%3C/svg%3E");
+            animation: wave-move 9s linear infinite reverse;
+            z-index: 39;
+        }
+
+        .wave5 {
+            bottom: 0;
+            height: 160px;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath fill='%23406078' d='M0,18 Q200,58 460,18 T1200,18 V120 H0 Z'/%3E%3C/svg%3E");
+            animation: wave-move 7s linear infinite;
+            z-index: 40;
+        }
+
+        @keyframes wave-move {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Water Ripples */
+        .ripples {
+            position: absolute;
+            bottom: 28%;
+            left: 0;
+            width: 100%;
+            height: 18%;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent 0,
+                rgba(255,200,80,0.04) 18px,
+                transparent 36px,
+                transparent 54px
+            );
+            z-index: 41;
+            animation: ripple-anim 4.5s linear infinite;
+        }
+
+        @keyframes ripple-anim {
+            0% { background-position: 0 0; }
+            100% { background-position: 72px 0; }
+        }
+
+        /* --- TEXT --- */
+        .text {
+            position: absolute;
+            bottom: 4%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.9);
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 300;
+            letter-spacing: 14px;
+            text-transform: uppercase;
+            z-index: 100;
+            text-shadow: 0 0 25px rgba(255,140,50,0.7), 0 0 50px rgba(255,100,30,0.4);
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 35px;
+            height: 35px;
+            background: radial-gradient(circle, rgba(255,200,60,0.9), rgba(255,120,30,0.4));
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            filter: blur(3px);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        body:hover .cursor {
+            opacity: 0.7;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .sun { width: 75px; height: 75px; }
+            .bird-group, .bird-group-2 { display: none; }
+            .text { font-size: 0.95rem; letter-spacing: 6px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scene" id="scene">
+        
+        <!-- Sky -->
+        <div class="sky">
+            <div class="stars"></div>
+        </div>
+
+        <!-- Sun -->
+        <div class="sun-container" id="sun">
+            <div class="sun"></div>
+        </div>
+
+        <!-- Glows -->
+        <div class="horizon-glow"></div>
+        <div class="reflection"></div>
+
+        <!-- Birds -->
+        <div class="bird-group">
+            <div class="bird bird-1"></div>
+            <div class="bird bird-2"></div>
+            <div class="bird bird-3"></div>
+            <div class="bird bird-4"></div>
+            <div class="bird bird-5"></div>
+        </div>
+        <div class="bird-group-2">
+            <div class="bird bird-1"></div>
+            <div class="bird bird-2"></div>
+            <div class="bird bird-3"></div>
+        </div>
+
+        <!-- Ocean -->
+        <div class="ocean"></div>
+        <div class="ripples"></div>
+
+        <!-- Waves -->
+        <div class="waves-container">
+            <div class="wave wave1"></div>
+            <div class="wave wave2"></div>
+            <div class="wave wave3"></div>
+            <div class="wave wave4"></div>
+            <div class="wave wave5"></div>
+        </div>
+
+        <!-- Text -->
+        <div class="text">Ocean Sunset</div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+
+    <script>
+        // Full 3D Interactive JavaScript for Ocean Sunset Scene
+
+const scene = document.getElementById('scene');
+const sun = document.getElementById('sun');
+const cursor = document.getElementById('cursor');
+
+// Mouse position tracking
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
+
+// Sun current position
+let currentSunX = 0;
+let currentSunY = 0;
+let targetSunX = 0;
+let targetSunY = 0;
+
+// Scene rotation current position
+let currentSceneX = 0;
+let currentSceneY = 0;
+let targetSceneX = 0;
+let targetSceneY = 0;
+
+// Reflection position
+let currentRefX = 0;
+let currentRefY = 0;
+
+// Event: Mouse Move
+document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    
+    // Update custom cursor
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+});
+
+// Event: Touch Move (for mobile)
+document.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 0) {
+        mouseX = e.touches[0].clientX;
+        mouseY = e.touches[0].clientY;
+    }
+});
+
+// Event: Resize
+window.addEventListener('resize', () => {
+    // Reset on resize
+    currentSunX = 0;
+    currentSunY = 0;
+    currentSceneX = 0;
+    currentSceneY = 0;
+});
+
+// Animation Loop
+function animate() {
+    // Calculate normalized mouse position (-1 to 1)
+    let normX = (mouseX - window.innerWidth / 2) / (window.innerWidth / 2);
+    let normY = (mouseY - window.innerHeight / 2) / (window.innerHeight / 2);
+    
+    // ==================== SUN MOVEMENT ====================
+    // Sun moves more dramatically based on mouse
+    targetSunX = normX * 50;  // 50px horizontal move
+    targetSunY = normY * 30; // 30px vertical move
+    
+    // Smooth interpolation (ease-out effect)
+    currentSunX += (targetSunX - currentSunX) * 0.06;
+    currentSunY += (targetSunY - currentSunY) * 0.06;
+    
+    // Apply sun transform
+    sun.style.transform = `translate(calc(-50% + ${currentSunX}px), ${currentSunY}px)`;
+    
+    // ==================== SCENE TILT (3D Effect) ====================
+    // Subtle scene rotation based on mouse position
+    targetSceneX = normY * 2.5;  // Tilt up/down
+    targetSceneY = -normX * 4;   // Rotate left/right
+    
+    // Smooth interpolation
+    currentSceneX += (targetSceneX - currentSceneX) * 0.04;
+    currentSceneY += (targetSceneY - currentSceneY) * 0.04;
+    
+    // Apply scene 3D transform
+    scene.style.transform = `rotateX(${currentSceneX}deg) rotateY(${currentSceneY}deg)`;
+    
+    // ==================== CONTINUE ANIMATION ====================
+    requestAnimationFrame(animate);
+}
+
+// Start animation
+animate();
+
+// ==================== ADDITIONAL EFFECTS ====================
+
+// Click effect - Sun pulse
+sun.addEventListener('click', () => {
+    // Add pulse class or direct style change
+    sun.style.transition = 'transform 0.3s ease';
+    sun.style.transform = `translate(calc(-50% + ${currentSunX}px), ${currentSunY}px) scale(1.2)`;
+    
+    setTimeout(() => {
+        sun.style.transform = `translate(calc(-50% + ${currentSunX}px), ${currentSunY}px) scale(1)`;
+    }, 300);
+});
+
+// Double click to reset
+scene.addEventListener('dblclick', () => {
+    // Reset mouse to center
+    mouseX = window.innerWidth / 2;
+    mouseY = window.innerHeight / 2;
+    
+    // Smooth reset
+    targetSunX = 0;
+    targetSunY = 0;
+    targetSceneX = 0;
+    targetSceneY = 0;
+});
+
+// Optional: Add ripple effect on click
+document.addEventListener('click', (e) => {
+    // Can add custom ripple effect here if needed
+    console.log('Click at:', e.clientX, e.clientY);
+});
+
+// Hide cursor when leaving window
+document.addEventListener('mouseout', () => {
+    cursor.style.opacity = '0';
+});
+
+// Show cursor when entering window
+document.addEventListener('mouseover', () => {
+    cursor.style.opacity = '0.7';
+});
+        </script>
+</body>
+</html>
